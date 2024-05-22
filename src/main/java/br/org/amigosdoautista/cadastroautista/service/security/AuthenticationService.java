@@ -23,14 +23,8 @@ public class AuthenticationService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
-        UserSchema user;
-        if (request.getUsername().equals("eliangela@gmail.com") && request.getPassword().equals("123456")) {
-            user = new UserSchema();
-            user.setEmail(request.getUsername());
-        } else {
-            user = userRepository.findByEmail(request.getUsername())
-                    .orElseThrow(() -> new BadCredentialsException("Usuário ou senha inválidos."));
-        }
+        UserSchema user = userRepository.findByEmail(request.getUsername())
+                .orElseThrow(() -> new BadCredentialsException("Usuário ou senha inválidos."));
 
         return jwtService.generateToken(user);
     }
